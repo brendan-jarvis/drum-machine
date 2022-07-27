@@ -2,55 +2,55 @@ console.log(`--- Drum Machine ---`)
 
 const bankOne = [
   {
-    keyCode: 81,
+    keyCode: 'q',
     keyTrigger: 'Q',
     id: 'Heater-1',
     url: '/audio/Heater-1.mp3',
   },
   {
-    keyCode: 87,
+    keyCode: 'w',
     keyTrigger: 'W',
     id: 'Heater-2',
     url: '/audio/Heater-2.mp3',
   },
   {
-    keyCode: 69,
+    keyCode: 'e',
     keyTrigger: 'E',
     id: 'Heater-3',
     url: '/audio/Heater-3.mp3',
   },
   {
-    keyCode: 65,
+    keyCode: 'a',
     keyTrigger: 'A',
     id: 'Heater-4',
     url: '/audio/Heater-4_1.mp3',
   },
   {
-    keyCode: 83,
+    keyCode: 's',
     keyTrigger: 'S',
     id: 'Clap',
     url: '/audio/Heater-6.mp3',
   },
   {
-    keyCode: 68,
+    keyCode: 'd',
     keyTrigger: 'D',
     id: 'Open-HH',
     url: '/audio/Dsc_Oh.mp3',
   },
   {
-    keyCode: 90,
+    keyCode: 'z',
     keyTrigger: 'Z',
     id: "Kick-n'-Hat",
     url: '/audio/Kick_n_Hat.mp3',
   },
   {
-    keyCode: 88,
+    keyCode: 'x',
     keyTrigger: 'X',
     id: 'Kick',
     url: '/audio/RP4_KICK_1.mp3',
   },
   {
-    keyCode: 67,
+    keyCode: 'c',
     keyTrigger: 'C',
     id: 'Closed-HH',
     url: '/audio/Cev_H2.mp3',
@@ -59,55 +59,55 @@ const bankOne = [
 
 const bankTwo = [
   {
-    keyCode: 81,
+    keyCode: 'y',
     keyTrigger: 'Y',
     id: 'Chord-1',
     url: '/audio/Chord_1.mp3',
   },
   {
-    keyCode: 87,
+    keyCode: 'u',
     keyTrigger: 'U',
     id: 'Chord-2',
     url: '/audio/Chord_2.mp3',
   },
   {
-    keyCode: 69,
+    keyCode: 'i',
     keyTrigger: 'I',
     id: 'Chord-3',
     url: '/audio/Chord_3.mp3',
   },
   {
-    keyCode: 65,
+    keyCode: 'h',
     keyTrigger: 'H',
     id: 'Shaker',
     url: '/audio/Give_us_a_light.mp3',
   },
   {
-    keyCode: 83,
+    keyCode: 'j',
     keyTrigger: 'J',
     id: 'Open-HH',
     url: '/audio/Dry_Ohh.mp3',
   },
   {
-    keyCode: 68,
+    keyCode: 'k',
     keyTrigger: 'K',
     id: 'Closed-HH',
     url: '/audio/Bld_H1.mp3',
   },
   {
-    keyCode: 90,
+    keyCode: 'b',
     keyTrigger: 'B',
     id: 'Punchy-Kick',
     url: '/audio/punchy_kick_1.mp3',
   },
   {
-    keyCode: 88,
+    keyCode: 'n',
     keyTrigger: 'N',
     id: 'Side-Stick',
     url: '/audio/side_stick_1.mp3',
   },
   {
-    keyCode: 67,
+    keyCode: 'm',
     keyTrigger: 'M',
     id: 'Snare',
     url: '/audio/Brk_Snr.mp3',
@@ -117,11 +117,10 @@ const bankTwo = [
 // Wait for page to finish loading then load the drum machine
 window.onload = function () {
   addButtons()
+  addLastPressedKey()
 }
 
 function addButtons() {
-  console.log('Adding buttons ...')
-
   const bankOneContainer = document.getElementById('bank-one')
   const bankTwoContainer = document.getElementById('bank-two')
 
@@ -130,20 +129,17 @@ function addButtons() {
     const button = document.createElement('button')
     button.innerHTML = instrument.keyTrigger
     button.id = instrument.id
-    button.className = 'drum-pad'
+    button.className = 'btn btn-dark'
+    button.style = 'width: 80px; height: 80px;'
     bankOneContainer.appendChild(button)
 
-    // Add event listener to each button
-    button.addEventListener('click', () => {
-      playSound(instrument.url)
-    })
+    // Create audio element and add it to the button
+    const audio = document.createElement('audio')
+    audio.id = `${instrument.keyCode}-sound`
+    audio.src = instrument.url
+    button.appendChild(audio)
 
-    // Add event listener for keypresses
-    document.addEventListener('keydown', (e) => {
-      if (e === instrument.keyTrigger) {
-        playSound(instrument.url)
-      }
-    })
+    createEventListeners(button, instrument.keyCode, instrument.id)
   })
 
   // Set up the right drum pad
@@ -151,24 +147,36 @@ function addButtons() {
     const button = document.createElement('button')
     button.innerHTML = instrument.keyTrigger
     button.id = instrument.id
-    button.className = 'drum-pad'
+    button.className = 'btn btn-dark'
+    button.style = 'width: 80px; height: 80px;'
     bankTwoContainer.appendChild(button)
 
-    // Add event listener to each button
-    button.addEventListener('click', () => {
-      playSound(instrument.url)
-    })
+    // Create audio element and add it to the button
+    const audio = document.createElement('audio')
+    audio.id = `${instrument.keyCode}-sound`
+    audio.src = instrument.url
+    button.appendChild(audio)
 
-    // Add event listener for keypresses
-    document.addEventListener('keydown', (e) => {
-      if (e === instrument.keyTrigger) {
-        playSound(instrument.url)
-      }
-    })
+    createEventListeners(button, instrument.keyCode, instrument.id)
   })
 }
 
-function playSound(url) {
-  const audio = new Audio(url)
-  audio.play()
+function createEventListeners(button, key, id) {
+  // Add event listener to each button
+  button.addEventListener('click', () => {
+    playSound(key)
+    document.getElementById('last-pressed-key').innerHTML = id
+  })
+
+  // Add event listener for keypresses
+  document.addEventListener('keydown', (e) => {
+    if (e.key === key) {
+      playSound(key)
+      document.getElementById('last-pressed-key').innerHTML = id
+    }
+  })
+}
+
+function playSound(key) {
+  document.getElementById(`${key}-sound`).play()
 }
