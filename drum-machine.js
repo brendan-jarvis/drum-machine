@@ -124,6 +124,9 @@ function addButtons() {
   const bankOneContainer = document.getElementById('bank-one')
   const bankTwoContainer = document.getElementById('bank-two')
 
+  bankOneContainer.style = 'max-width: 300px;'
+  bankTwoContainer.style = 'max-width: 300px;'
+
   // Set up the left drum pad
   bankOne.forEach((instrument) => {
     const button = document.createElement('button')
@@ -137,6 +140,7 @@ function addButtons() {
     const audio = document.createElement('audio')
     audio.id = `${instrument.keyCode}-sound`
     audio.src = instrument.url
+    audio.preload = 'auto'
     button.appendChild(audio)
 
     createEventListeners(button, instrument.keyCode, instrument.id)
@@ -155,6 +159,7 @@ function addButtons() {
     const audio = document.createElement('audio')
     audio.id = `${instrument.keyCode}-sound`
     audio.src = instrument.url
+    audio.preload = 'auto'
     button.appendChild(audio)
 
     createEventListeners(button, instrument.keyCode, instrument.id)
