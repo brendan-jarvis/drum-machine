@@ -25,7 +25,21 @@
         <div class="col-sm" id="bank-one"></div>
         <div class="col-sm" id="bank-two"></div>
         <div class="col-sm">
-          <h2 class="alert alert-dark" id="last-pressed-key">Press a key to play a sound!</h2>
+          <h2 class="alert alert-dark" id="last-pressed-key">
+            Press a key to play a sound!
+          </h2>
+          <div id="playback-speed-div">
+            <label for="playback-speed">Playback speed:</label>
+            <p id="playback-speed-value">1</p>
+            <input
+              type="range"
+              id="playback-speed"
+              min="0.1"
+              max="2"
+              step="0.1"
+              value="1"
+            />
+          </div>
         </div>
       </div>
     </div>

@@ -117,7 +117,13 @@ const bankTwo = [
 // Wait for page to finish loading then load the drum machine
 window.onload = function () {
   addButtons()
-  addLastPressedKey()
+
+  // Add event listeners to the playback slider
+  const playbackSlider = document.getElementById('playback-speed')
+  playbackSlider.addEventListener('change', (e) => {
+    const playbackSpeed = e.target.value
+    document.getElementById('playback-speed-value').innerHTML = playbackSpeed
+  })
 }
 
 function addButtons() {
@@ -169,12 +175,20 @@ function addButtons() {
 function createEventListeners(button, key, id) {
   // Add event listener to each button
   button.addEventListener('click', () => {
+    // Set speed based on #playback-speed
+    const playbackSpeed = document.getElementById('playback-speed').value
+    document.getElementById(`${key}-sound`).playbackRate = playbackSpeed
+
     playSound(key)
     document.getElementById('last-pressed-key').innerHTML = id
   })
 
   // Add event listener for touch
   button.addEventListener('touchstart', () => {
+    // Set speed based on #playback-speed
+    const playbackSpeed = document.getElementById('playback-speed').value
+    document.getElementById(`${key}-sound`).playbackRate = playbackSpeed
+
     playSound(key)
     document.getElementById('last-pressed-key').innerHTML = id
   })
@@ -182,6 +196,10 @@ function createEventListeners(button, key, id) {
   // Add event listener for keypresses
   document.addEventListener('keydown', (e) => {
     if (e.key === key) {
+      // Set speed based on #playback-speed
+      const playbackSpeed = document.getElementById('playback-speed').value
+      document.getElementById(`${key}-sound`).playbackRate = playbackSpeed
+
       playSound(key)
       document.getElementById('last-pressed-key').innerHTML = id
     }
