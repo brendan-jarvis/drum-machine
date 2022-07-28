@@ -179,11 +179,6 @@ function createEventListeners(button, key, id) {
     document.getElementById('last-pressed-key').innerHTML = id
   })
 
-  // Add event listener for touchend
-  button.addEventListener('touchend', () => {
-    pauseSound(key)
-  })
-
   // Add event listener for keypresses
   document.addEventListener('keydown', (e) => {
     if (e.key === key) {
@@ -191,19 +186,8 @@ function createEventListeners(button, key, id) {
       document.getElementById('last-pressed-key').innerHTML = id
     }
   })
-
-  // Add event listener for keyup
-  document.addEventListener('keyup', (e) => {
-    if (e.key === key) {
-      pauseSound(key)
-    }
-  })
 }
 
 function playSound(key) {
   document.getElementById(`${key}-sound`).play()
-}
-
-function pauseSound(key) {
-  document.getElementById(`${key}-sound`).pause()
 }
